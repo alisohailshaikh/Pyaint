@@ -397,6 +397,49 @@ def draw_heart():
 
 
 
+def get_solid_bspline_coordinates(X,Y):
+    list= []
+    for i in range(4):
+        list.append((X + i, Y - 7 - i))
+        list.append((X - i, Y - 7 + i))
+    list.append((X,Y))
+    for i in range(4):
+        list.append((X + i, Y + 7 - i))
+        list.append((X - i, Y + 7 + i))
+    for i in range(4):
+        list.append((X - i, Y - i))
+        list.append((X + i, Y + i))
+    return list
+
+def get_dotted_bspline_coordinates(X,Y):
+    list= []
+    for i in range(0,4,2):
+        list.append((X + i, Y - 7 - i))
+        list.append((X - i, Y - 7 + i))
+    list.append((X,Y))
+    for i in range(0,4,2):
+        list.append((X + i, Y + 7 - i))
+        list.append((X - i, Y + 7 + i))
+    for i in range(0,4,2):
+        list.append((X - i, Y - i))
+        list.append((X + i, Y + i))
+    return list
+
+
+def draw_bspline():
+    pos = pygame.mouse.get_pos()
+    x, y = get_row_col_from_pos(pos)
+    if DOTTED:
+        coordinates = get_dotted_bspline_coordinates(x,y)
+    else:
+        coordinates = get_solid_bspline_coordinates(x,y)
+
+    for i in coordinates:
+            x, y = i
+            grid[x][y] = drawing_color
+         
+        
+         
 clicks = 0
 while run:
     clock.tick(FPS) #limiting FPS to 60 or any other value
@@ -420,6 +463,8 @@ while run:
                     draw_circle()
                 elif STATE == "DRAW HEART":
                     draw_heart()
+                elif STATE == "DRAW BSPLINE":
+                    draw_bspline()
 
 
             except IndexError:
@@ -479,6 +524,9 @@ while run:
 
                     if button.text == "Draw Heart":
                         STATE = "DRAW HEART"
+                        break
+                    if button.text == "Draw BSpline":
+                        STATE = "DRAW BSPLINE"
                         break
 
                     if button.text == "- - - - - - -":
